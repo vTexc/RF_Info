@@ -288,3 +288,4 @@ __pycache__/
 
 /config.ini
 /ErrorLog.txt
+%Backup%/
