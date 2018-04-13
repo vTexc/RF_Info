@@ -9,4 +9,4 @@ src
 LICENSE
 README.md
 config.ini
-Screenshot.png
+box_screenshot.jpg
