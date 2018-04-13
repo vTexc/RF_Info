@@ -69,6 +69,8 @@ public class RFSkill
         rfDps = GetRFDamage();
         total = GetActualRFDegen();
     }
+
+
     //  FINAL METHODS
     //
     //  Used to return the definitive value after formulas and verifications was applied
@@ -207,8 +209,7 @@ public class RFSkill
         float supportMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.SUPPORT, Info.RF_SUPPORTS_MORE_DAMAGE));
         float playerMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_MORE_DAMAGE));
         float playerIncMult = Info.GetMultiplier(ModType.INC, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_INCREASED_DAMAGE));
-
-        PoeHUD.DebugPlug.DebugPlugin.LogMsg(GetBaseRFDamage() + " " + supportMoreMult + " " + playerIncMult + " " + playerMoreMult, 1.0f);
+        
         return GetBaseRFDamage() * 
             supportMoreMult * 
             playerIncMult * 
