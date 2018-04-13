@@ -1,0 +1,6 @@
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\RF-Info.dll
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\RF-Info.pdb
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\src\RF-Info\obj\Debug\RF-Info.csprojResolveAssemblyReference.cache
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\src\RF-Info\obj\Debug\RF-Info.csproj.CoreCompileInputs.cache
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\src\RF-Info\obj\Debug\RF-Info.dll
+C:\Users\Tex\Documents\Poe\PoEHUD-x64\plugins\RF-Info\src\RF-Info\obj\Debug\RF-Info.pdb
