@@ -27,7 +27,8 @@ namespace RF_Info
                 "Raw Degen",
                 "Dmg Taken",
                 "Total %",
-                "Total"
+                "Total",
+                "DoT DPS"
             };
 
         private Vector2 lastPos = new Vector2();
@@ -71,24 +72,29 @@ namespace RF_Info
 
             lastPos.X += Settings.Padding;
             lastPos.Y += fakeTextPosY;
-
+            
             foreach (string text in textInfo)
             {
+                if (text.Equals(textInfo.Last()))
+                {
+                    lastPos.Y += Settings.TextSize;
+                }
+
                 Graphics.DrawText(text, Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Left);
 
                 lastPos.X += textBox.Width - Settings.Padding * 2;
 
                 Graphics.DrawText(skill.GetValue(text), Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Right);
-
+                
                 lastPos.X -= textBox.Width - Settings.Padding * 2;
                 lastPos.Y += Settings.TextSize;
             }
             
             // Draw the Dot DPS
-            lastPos.Y += Settings.TextSize;
-            Graphics.DrawText("DoT DPS", Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Left);
-            lastPos.X += textBox.Width - Settings.Padding * 2;
-            Graphics.DrawText(skill.GetValue("DoT DPS"), Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Right);
+            //lastPos.Y += Settings.TextSize;
+            //Graphics.DrawText("DoT DPS", Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Left);
+            //lastPos.X += textBox.Width - Settings.Padding * 2;
+            //Graphics.DrawText(skill.GetValue("DoT DPS"), Settings.TextSize, lastPos, Settings.TextColor, SharpDX.Direct3D9.FontDrawFlags.Right);
         }
 
         // Draw the box and its border
@@ -97,7 +103,7 @@ namespace RF_Info
             textBox.X = lastPos.X;
             textBox.Y = lastPos.Y;
             textBox.Width = 9 * (Settings.TextSize) + Settings.Padding * 2;
-            textBox.Height = (textInfo.Count() + 2) * (Settings.TextSize) + Settings.Padding * 2;
+            textBox.Height = (textInfo.Count() + 1) * (Settings.TextSize) + Settings.Padding * 2;
 
             Graphics.DrawBox(textBox, Settings.BackgroundColor);
             Graphics.DrawFrame(textBox, Settings.BorderSize, Settings.BorderColor);

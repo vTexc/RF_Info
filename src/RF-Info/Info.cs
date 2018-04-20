@@ -23,7 +23,6 @@ public enum ValueType
 
 class Info
 {
-    public const ushort RF_SKILL_ID = 32777;
     public const string RF_SKILL_INTERNAL_NAME = "righteous_fire";
     public const string RF_SKILL_NAME = "RighteousFire";
 
@@ -218,11 +217,19 @@ class Info
     }
 
     /*
+     * Return if player has MoM
+     */
+     public static bool IsMoMActive()
+    {
+        return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Stats>().StatDictionary[GameStat.DamageRemovedFromManaBeforeLifePct] != null;
+    }
+
+    /*
      * Return if player has Righteous Fire socketed
      */
     public static bool IsRFSocketd()
     {
-        rfIndex = GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Actor>().ActorSkills.FindIndex(skill => skill.Id == Info.RF_SKILL_ID);
+        rfIndex = GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Actor>().ActorSkills.FindIndex(skill => skill.Name.Equals(Info.RF_SKILL_NAME));
         return rfIndex > -1 ? true : false;
     }
 }

@@ -31,23 +31,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Developer">
-      <HintPath>..\..\..\..\Developer.exe</HintPath>
+      <HintPath>..\..\..\..\Poe\PoEHUD-x64\Developer.exe</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\..\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\..\Poe\PoEHUD-x64\SharpDX.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Desktop">
-      <HintPath>..\..\..\..\SharpDX.Desktop.dll</HintPath>
+      <HintPath>..\..\..\..\Poe\PoEHUD-x64\SharpDX.Desktop.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\..\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\..\..\Poe\PoEHUD-x64\SharpDX.Direct3D9.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Mathematics">
-      <HintPath>..\..\..\..\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>..\..\..\..\Poe\PoEHUD-x64\SharpDX.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

@@ -162,6 +162,14 @@ public class RFSkill
     }
 
     /*
+     * Return the value of damage percent taken from mana before life
+     */
+     private float GetMOMValue()
+    {
+        return Info.GetPlayerStatValue(GameStat.DamageRemovedFromManaBeforeLifePct);
+    }
+
+    /*
      * Return total raw degenerate damage
      */
     private float GetRFDegen()
@@ -198,7 +206,10 @@ public class RFSkill
      */
     private float GetDamageTaken()
     {
-        return 1.0f - (Info.IsPlayerMoving() ? Info.GetPantheonMinor() : 0.0f);
+        return 1.0f - (
+            (Info.IsPlayerMoving() ? Info.GetPantheonMinor() : 0.0f) +
+            ((Info.IsMoMActive() ? GetMOMValue() : 0f) / 100)
+            );
     }
 
     /*
