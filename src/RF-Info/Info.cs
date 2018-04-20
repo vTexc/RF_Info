@@ -193,9 +193,24 @@ class Info
         {
             return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Stats>().StatDictionary[key];
         }
-        catch (Exception e)
+        catch
         {
             return 0.0f;
+        }
+    }
+
+    /*
+     * Check if player has the asked stat
+     */
+     public static bool GetPlayerHasStat(GameStat key)
+    {
+        try
+        {
+            return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Stats>().StatDictionary[GameStat.DamageRemovedFromManaBeforeLifePct] != null;
+        }
+        catch
+        {
+            return false;
         }
     }
 
@@ -210,7 +225,7 @@ class Info
         {
             return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Actor>().ActorSkills[rfIndex].Stats[key];
         }
-        catch (Exception e)
+        catch
         {
             return 0.0f;
         }
@@ -221,7 +236,7 @@ class Info
      */
      public static bool IsMoMActive()
     {
-        return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Stats>().StatDictionary[GameStat.DamageRemovedFromManaBeforeLifePct] != null;
+        return GetPlayerHasStat(GameStat.DamageRemovedFromManaBeforeLifePct);
     }
 
     /*
