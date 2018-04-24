@@ -10,228 +10,232 @@ using PoeHUD.Poe.Components;
 using PoeHUD.Controllers;
 using PoeHUD.Models.Enums;
 
-public class RFSkill
+namespace RF_Info
 {
-    public RFSkill()
+    public class RFSkill
     {
-        rawRegen = 0;
-        dmgTkn = 0;
-        rfDegen = 0;
-        rfDegenPct = 0;
-        rfDps = 0;
-        total = 0;
-    }
-    
-    private const float RfDegenLife = 0.90f;
-    private const float RfDegenES = 0.70f;
-
-    public float rawRegen;
-    public float dmgTkn;
-    public float rfDegen;
-    public float rfDegenPct;
-    public float rfDps;
-    public float total;
-
-    public string GetValue(string key)
-    {
-        try
+        public RFSkill()
         {
-            switch (key)
+            rawRegen = 0;
+            dmgTkn = 0;
+            rfDegen = 0;
+            rfDegenPct = 0;
+            rfDps = 0;
+            total = 0;
+        }
+
+        private const float RfDegenLife = 0.90f;
+        private const float RfDegenES = 0.70f;
+
+        public float rawRegen;
+        public float dmgTkn;
+        public float rfDegen;
+        public float rfDegenPct;
+        public float rfDps;
+        public float total;
+
+        public string GetValue(string key)
+        {
+            try
             {
-                case "Raw Regen":
-                    return rawRegen.ToString(Info.decimalStringFormat);
-                case "Raw Degen":
-                    return rfDegen.ToString(Info.decimalStringFormat);
-                case "Dmg Taken":
-                    return dmgTkn.ToString(Info.decimalStringFormat) + "%";
-                case "Total %":
-                    return rfDegenPct.ToString(Info.decimalSymbolStringFormat) + "%";
-                case "Total":
-                    return total.ToString(Info.decimalSymbolStringFormat);
-                case "DoT DPS":
-                    return Info.IsRFSocketd() ? rfDps.ToString(Info.decimalStringFormat) : "not found";
-                default:
-                    return "not found";
+                switch (key)
+                {
+                    case "Raw Regen":
+                        return rawRegen.ToString(Info.decimalStringFormat);
+                    case "Raw Degen":
+                        return rfDegen.ToString(Info.decimalStringFormat);
+                    case "Dmg Taken":
+                        return dmgTkn.ToString(Info.decimalStringFormat) + "%";
+                    case "Total %":
+                        return rfDegenPct.ToString(Info.decimalSymbolStringFormat) + "%";
+                    case "Total":
+                        return total.ToString(Info.decimalSymbolStringFormat);
+                    case "DoT DPS":
+                        return Info.IsRFSocketd() ? rfDps.ToString(Info.decimalStringFormat) : "not found";
+                    default:
+                        return "not found";
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                return "not found";
             }
         }
-        catch (KeyNotFoundException e)
+
+        public void UpdateInfo()
         {
-            return "not found";
+            rawRegen = GetCorrectRegen();
+            rfDegen = GetRFDegen();
+            dmgTkn = (GetDamageTaken() * 100);
+            rfDegenPct = (GetActualRFDegenPct() * 100);
+            rfDps = GetRFDamage();
+            total = GetActualRFDegen();
         }
-    }
-
-    public void UpdateInfo()
-    {
-        rawRegen = GetCorrectRegen();
-        rfDegen = GetRFDegen();
-        dmgTkn = (GetDamageTaken() * 100);
-        rfDegenPct = (GetActualRFDegenPct() * 100);
-        rfDps = GetRFDamage();
-        total = GetActualRFDegen();
-    }
 
 
-    //  FINAL METHODS
-    //
-    //  Used to return the definitive value after formulas and verifications was applied
+        //  FINAL METHODS
+        //
+        //  Used to return the definitive value after formulas and verifications was applied
 
-    /*
-     * Get the correct regen ratio
-     * If zealoth's oath     -      ES
-     * Else                  -      LIFE
-     */
-    private float GetCorrectRegen()
-    {
-        return Info.IsPlayerWithZealothsOath() ? GetEsRegen() : GetLifeRegen();
-    }
+        /*
+         * Get the correct regen ratio
+         * If zealoth's oath     -      ES
+         * Else                  -      LIFE
+         */
+        private float GetCorrectRegen()
+        {
+            return Info.IsPlayerWithZealothsOath() ? GetEsRegen() : GetLifeRegen();
+        }
 
-    /*
-     * Get the correct needed regen
-     * If zealoth's oath     -      ES
-     * Else                  -      LIFE
-     */
-    private float GetNeededRegen()
-    {
-        return Info.IsPlayerWithZealothsOath() ? GetNeededEsRegen() : GetNeededLifeRegen();
-    }
+        /*
+         * Get the correct needed regen
+         * If zealoth's oath     -      ES
+         * Else                  -      LIFE
+         */
+        private float GetNeededRegen()
+        {
+            return Info.IsPlayerWithZealothsOath() ? GetNeededEsRegen() : GetNeededLifeRegen();
+        }
 
-    /*
-     * Get the correct needed regen percent
-     * If zealoth's oath     -      ES
-     * Else                  -      LIFE
-     */
-    private float GetNeededRegenPct()
-    {
-        return Info.IsPlayerWithZealothsOath() ? GetNeededEsRegenPct() : GetNeededLifeRegenPct();
-    }
+        /*
+         * Get the correct needed regen percent
+         * If zealoth's oath     -      ES
+         * Else                  -      LIFE
+         */
+        private float GetNeededRegenPct()
+        {
+            return Info.IsPlayerWithZealothsOath() ? GetNeededEsRegenPct() : GetNeededLifeRegenPct();
+        }
 
-    //  FORMULA METHODS
-    //
-    //  Used to calculate the values
+        //  FORMULA METHODS
+        //
+        //  Used to calculate the values
 
-    /*
-     * Return Life Regenarated per second
-     */
-    private float GetLifeRegen()
-    {
-        return Info.GetPlayerStatValue(GameStat.LifeRegenerationRatePerMinute) / 60;
-    }
+        /*
+         * Return Life Regenarated per second
+         */
+        private float GetLifeRegen()
+        {
+            return Info.GetPlayerStatValue(GameStat.LifeRegenerationRatePerMinute) / 60;
+        }
 
-    /*
-     * Return how much life regen is needed to
-     * not take damage from RF degen
-     */
-    private float GetNeededLifeRegen()
-    {
-        return Info.GetLife() * GetNeededLifeRegenPct();
-    }
+        /*
+         * Return how much life regen is needed to
+         * not take damage from RF degen
+         */
+        private float GetNeededLifeRegen()
+        {
+            return Info.GetLife() * GetNeededLifeRegenPct();
+        }
 
-    /*
-     * Return how much life regen in percentage is needed to
-     * not take damage from RF degen
-     */
-    private float GetNeededLifeRegenPct()
-    {
-        return RfDegenLife * GetFireResistMaxDif();
-    }
+        /*
+         * Return how much life regen in percentage is needed to
+         * not take damage from RF degen
+         */
+        private float GetNeededLifeRegenPct()
+        {
+            return RfDegenLife * GetFireResistMaxDif();
+        }
 
-    /*
-     * Return Energy Shield Regenarated per second
-     */
-    private float GetEsRegen()
-    {
-        return Info.GetPlayerStatValue(GameStat.EnergyShieldRegenerationRatePerMinute) / 60;
-    }
+        /*
+         * Return Energy Shield Regenarated per second
+         */
+        private float GetEsRegen()
+        {
+            return Info.GetPlayerStatValue(GameStat.EnergyShieldRegenerationRatePerMinute) / 60;
+        }
 
-    /*
-     * Return how much energy shield regen is needed to
-     * not take damage from RF degen
-     */
-    private float GetNeededEsRegen()
-    {
-        return Info.GetES() * GetNeededEsRegenPct();
-    }
+        /*
+         * Return how much energy shield regen is needed to
+         * not take damage from RF degen
+         */
+        private float GetNeededEsRegen()
+        {
+            return Info.GetES() * GetNeededEsRegenPct();
+        }
 
-    /*
-     * Return how much energy shield regen in percentage is needed to
-     * not take damage from RF degen
-     */
-    private float GetNeededEsRegenPct()
-    {
-        return RfDegenES * GetFireResistMaxDif();
-    }
+        /*
+         * Return how much energy shield regen in percentage is needed to
+         * not take damage from RF degen
+         */
+        private float GetNeededEsRegenPct()
+        {
+            return RfDegenES * GetFireResistMaxDif();
+        }
 
-    /*
-     * Return the value of damage percent taken from mana before life
-     */
-     private float GetMOMValue()
-    {
-        return Info.GetPlayerStatValue(GameStat.DamageRemovedFromManaBeforeLifePct);
-    }
+        /*
+         * Return the value of damage percent taken from mana before life
+         */
+        private float GetMOMValue()
+        {
+            return -Info.GetPlayerStatValue(GameStat.DamageRemovedFromManaBeforeLifePct);
+        }
 
-    /*
-     * Return total raw degenerate damage
-     */
-    private float GetRFDegen()
-    {
-        return ((Info.GetLife() * RfDegenLife) + (Info.GetES() * RfDegenES)) * GetFireResistMaxDif() * GetDamageTaken();
-    }
+        /*
+         * Return total raw degenerate damage
+         */
+        private float GetRFDegen()
+        {
+            return ((Info.GetLife() * RfDegenLife) + (Info.GetES() * RfDegenES)) * GetFireResistMaxDif() * GetDamageTaken();
+        }
 
-    /*
-     * Return the actual degen/regen value
-     */
-    private float GetActualRFDegen()
-    {
-        return GetCorrectRegen() - GetRFDegen();
-    }
+        /*
+         * Return the actual degen/regen value
+         */
+        private float GetActualRFDegen()
+        {
+            return GetCorrectRegen() - GetRFDegen();
+        }
 
-    /*
-     * Return the actual degen/regen percent value
-     */
-    private float GetActualRFDegenPct()
-    {
-        return GetActualRFDegen() / (Info.IsPlayerWithZealothsOath() ? Info.GetES() : Info.GetLife());
-    }
+        /*
+         * Return the actual degen/regen percent value
+         */
+        private float GetActualRFDegenPct()
+        {
+            return GetActualRFDegen() / (Info.IsPlayerWithZealothsOath() ? Info.GetES() : Info.GetLife());
+        }
 
-    /*
-     * Return the difference between 100% fire resistance and actual maximum fire resistance percentage
-     */
-    private float GetFireResistMaxDif()
-    {
-        return (1 - Info.GetFireResistPct() / 100);
-    }
+        /*
+         * Return the difference between 100% fire resistance and actual maximum fire resistance percentage
+         */
+        private float GetFireResistMaxDif()
+        {
+            return (1 - Info.GetFireResistPct() / 100);
+        }
 
-    /*
-     * Return the multiplier for damage taken
-     */
-    private float GetDamageTaken()
-    {
-        return 1.0f - (
-            (Info.IsPlayerMoving() ? Info.GetPantheonMinor() : 0.0f) +
-            ((Info.IsMoMActive() ? GetMOMValue() : 0f) / 100)
-            );
-    }
+        /*
+         * Return the multiplier for damage taken
+         */
+        private float GetDamageTaken()
+        {
+            return 1.0f + (
+                (Info.IsPlayerMoving() ? Info.GetPantheonMinor() : 0.0f) +
+                ((Info.IsMoMActive() ? GetMOMValue() : 0f) / 100) +
+                ((Info.GetPlayerStatValue(GameStat.DamageTakenPosPct) / 100))
+                );
+        }
 
-    /*
-     * Return multiplied RF Damage
-     */
-    private float GetRFDamage()
-    {
-        float supportMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.SUPPORT, Info.RF_SUPPORTS_MORE_DAMAGE));
-        float playerMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_MORE_DAMAGE));
-        float playerIncMult = Info.GetMultiplier(ModType.INC, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_INCREASED_DAMAGE));
-        
-        return GetBaseRFDamage() * 
-            supportMoreMult * 
-            playerIncMult * 
-            playerMoreMult;
-    }
+        /*
+         * Return multiplied RF Damage
+         */
+        private float GetRFDamage()
+        {
+            float supportMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.SUPPORT, Info.RF_SUPPORTS_MORE_DAMAGE));
+            float playerMoreMult = Info.GetMultiplier(ModType.MORE, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_MORE_DAMAGE));
+            float playerIncMult = Info.GetMultiplier(ModType.INC, Info.GetValues(ValueType.PLAYER, Info.RF_STAT_INCREASED_DAMAGE));
 
-    /*
-     * Return Base RF Damage
-     */
-    private float GetBaseRFDamage()
-    {
-        return (Info.GetLife() + Info.GetES()) * 0.4f;
+            return GetBaseRFDamage() *
+                supportMoreMult *
+                playerIncMult *
+                playerMoreMult;
+        }
+
+        /*
+         * Return Base RF Damage
+         */
+        private float GetBaseRFDamage()
+        {
+            return (Info.GetLife() + Info.GetES()) * 0.4f;
+        }
     }
 }

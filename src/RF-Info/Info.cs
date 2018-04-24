@@ -157,7 +157,7 @@ class Info
      */
     public static float GetPantheonMinor()
     {
-        return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Player>().PantheonMinor.Equals(Player.PantheonGod.Abberath) ? 0.05f : 0;
+        return GameController.Instance.Game.IngameState.Data.LocalPlayer.GetComponent<Player>().PantheonMinor.Equals(Player.PantheonGod.Abberath) ? -0.05f : 0;
     }
 
     /*
